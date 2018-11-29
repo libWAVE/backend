@@ -36,7 +36,13 @@ public class ClientRequestsService {
 	}
 
 	public List<ClientRequest> getByDesktopUuid(String desktopUuid) {
-		return new ArrayList<>(desktopMappedClientRequest.get(desktopUuid));
+		
+		ArrayList<ClientRequest> list = new ArrayList<>(desktopMappedClientRequest.get(desktopUuid));
+		
+		for (ClientRequest req:list) {
+		}
+		
+		return list;
 	}
 
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.libwave.backend.api.model.BooleanWrapper;
+import com.libwave.backend.api.model.StringWrapper;
 import com.libwave.backend.api.model.client.request.DownloadClientRequest;
 import com.libwave.backend.api.model.client.request.SearchClientRequest;
 import com.libwave.backend.service.UuidService;
@@ -38,7 +39,7 @@ public class RequestController {
 	}
 
 	@RequestMapping(path = "/api/client/requests/download/add")
-	public BooleanWrapper download(@RequestBody DownloadClientRequest request) {
+	public StringWrapper download(@RequestBody DownloadClientRequest request) {
 
 		if (UuidService.isUuidValid(request.getClientUuid()) && UuidService.isUuidValid(request.getDesktopUuid())) {
 
@@ -49,7 +50,7 @@ public class RequestController {
 
 		}
 
-		return new BooleanWrapper(true);
+		return new StringWrapper("");
 
 	}
 	
