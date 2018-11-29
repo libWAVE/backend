@@ -31,7 +31,7 @@ public class RequestController {
 
 			log.debug("Get client requests for desktop: " + uuid);
 
-			resp = clientRequestsService.getByUuid(uuid);
+			resp = clientRequestsService.getByDesktopUuid(uuid);
 
 		}
 
