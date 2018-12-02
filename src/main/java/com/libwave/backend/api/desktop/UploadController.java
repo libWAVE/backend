@@ -11,10 +11,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.libwave.api.Urls;
 import com.libwave.backend.service.FileService;
+import com.libwave.backend.service.HeartbeatService;
+import com.libwave.backend.service.FileService.FileRecord;
 import com.libwave.backend.service.UuidService;
 
 @Controller
@@ -25,21 +29,29 @@ public class UploadController {
 	@Autowired
 	private FileService fileService;
 
-	@RequestMapping(path = "/api/desktop/upload")
-	public void upload(String uuid, MultipartFile file, HttpServletResponse resp) throws Exception {
+	@Autowired
+	private HeartbeatService heartbeatService;
+
+	@RequestMapping(path = Urls.DESKTOP_UPLOAD_FILE)
+	public void upload(@PathVariable String desktopUuid, String uuid, MultipartFile file, HttpServletResponse resp)
+			throws Exception {
 
 		String fileUuid = null;
 
-		if (file != null && UuidService.isUuidValid(uuid)) {
+		if (file != null && UuidService.isUuidValid(uuid) && UuidService.isUuidValid(desktopUuid)) {
+			
+			heartbeatService.add(desktopUuid);
 
 			// Copy to temp folder
 			File temp = new File(SystemUtils.getJavaIoTmpDir(), UUID.randomUUID().toString());
 
 			file.transferTo(temp);
 
-			fileService.upload(temp, file.getOriginalFilename());
+			FileRecord uploaded = fileService.upload(temp, file.getOriginalFilename());
 
 			FileUtils.deleteDirectory(temp);
+
+			log.debug("Uploaded: " + file + " to " + uploaded);
 
 		}
 

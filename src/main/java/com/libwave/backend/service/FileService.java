@@ -162,6 +162,11 @@ public class FileService implements InitializingBean, DisposableBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
+
+		if (false == new File(folder).exists()) {
+			FileUtils.forceMkdir(new File(folder));
+		}
+
 		cleanup();
 	}
 

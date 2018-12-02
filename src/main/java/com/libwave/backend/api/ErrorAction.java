@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.libwave.backend.api.model.ErrorResponse;
+import com.libwave.api.model.common.ErrorResponse;
 
 @ControllerAdvice
 public class ErrorAction {

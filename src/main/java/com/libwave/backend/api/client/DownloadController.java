@@ -12,15 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.libwave.backend.api.model.StringWrapper;
-import com.libwave.backend.api.model.client.request.DownloadClientRequest;
+import com.libwave.api.Urls;
 import com.libwave.backend.service.FileService;
 import com.libwave.backend.service.FileService.FileRecord;
-import com.libwave.backend.service.UuidService;
-import com.libwave.backend.service.client.ClientRequestsService;
 
 @Controller
 public class DownloadController {
@@ -29,30 +25,11 @@ public class DownloadController {
 
 	@Autowired
 	private FileService fileService;
-	
-	@Autowired
-	private ClientRequestsService clientRequestsService;
 
-	@RequestMapping(path = "/api/client/download/request")
-	public StringWrapper download(@RequestBody DownloadClientRequest request) {
+	@RequestMapping(path = Urls.CLIENT_SUBMIT_DOWNLOAD_REQUEST_POLL)
+	public void download(@PathVariable String requestUuid, HttpServletResponse resp) {
 
-		if (UuidService.isUuidValid(request.getClientUuid()) && UuidService.isUuidValid(request.getDesktopUuid())) {
-
-			log.debug("Add download client [" + request.getClientUuid() + "] request for desktop ["
-					+ request.getDesktopUuid() + "]");
-
-			clientRequestsService.add(request);
-
-		}
- 
-		return new StringWrapper("");
-
-	}
-	
-	@RequestMapping(path = "/api/client/download/{uuid}")
-	public void download(@PathVariable String uuid, HttpServletResponse resp) {
-
-		FileRecord file = fileService.download(uuid);
+		FileRecord file = fileService.download(requestUuid);
 
 		if (file != null) {
 
