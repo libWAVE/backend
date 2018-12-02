@@ -28,17 +28,17 @@ public class DesktopRequestController {
 	private HeartbeatService heartbeatService;
 
 	@RequestMapping(path = Urls.DESKTOP_GET_CLIENT_REQUESTS)
-	public GetClientRequestsResponse getClientRequests(@PathVariable String dektopUuid, HttpServletResponse response) {
+	public GetClientRequestsResponse getClientRequests(@PathVariable String desktopUuid, HttpServletResponse response) {
 
 		GetClientRequestsResponse resp = null;
 
-		if (UuidService.isUuidValid(dektopUuid)) {
+		if (UuidService.isUuidValid(desktopUuid)) {
 
-			heartbeatService.add(dektopUuid);
+			heartbeatService.add(desktopUuid);
 
-			log.debug("Get client requests for desktop: " + dektopUuid);
+			log.debug("Get client requests for desktop: " + desktopUuid);
 
-			ClientRequest clientRequest = clientRequestsService.getByDesktopUuid(dektopUuid);
+			ClientRequest clientRequest = clientRequestsService.getByDesktopUuid(desktopUuid);
 
 			if (clientRequest != null) {
 

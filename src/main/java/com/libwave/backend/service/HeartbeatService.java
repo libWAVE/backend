@@ -7,13 +7,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.RemovalListener;
+import com.google.common.cache.RemovalNotification;
 
 @Service
 public class HeartbeatService {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private Cache<String, Boolean> pings = CacheBuilder.newBuilder().expireAfterWrite(Duration.ofMinutes(1L)).build();
+	private Cache<String, Boolean> pings = CacheBuilder.newBuilder().expireAfterWrite(Duration.ofMinutes(1L))
+			.removalListener(new RemovalListener<String, Boolean>() {
+
+				@Override
+				public void onRemoval(RemovalNotification<String, Boolean> notification) {
+					log.debug("Logged off: " + notification.getKey());
+				}
+			}).build();
 
 	public void add(String uuid) {
 		if (UuidService.isUuidValid(uuid)) {
